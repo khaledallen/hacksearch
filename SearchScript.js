@@ -59,29 +59,30 @@ const Search =  {
                 if(tag.active) lastActive.push({tagName: tag.tagName, tagCategory: cat.categoryName});
             });
         });
-        console.log(lastActive);
+        console.log(lastActive)
 
         this.facets = [];
-        dataToScan.forEach((data) => {
-            data.keywords.forEach(keyword => {
-                if (keyword.name != '') {
-                    if (!this.facets.some(cat => cat.categoryName == 'keyword'))
-                        this.facets.push({ categoryName: 'keyword', tags: [] });
+        dataToScan.forEach((lesson) => {
+            lesson.keywords.forEach(lessonTag => {
+                if (lessonTag.name != '') {
+                    if (!this.facets.some(cat => cat.categoryName == lessonTag.tagType))
+                        this.facets.push({ categoryName: "keyword", tags: [] });
 
-                    const facetCategory = this.facets.find(cat => cat.categoryName == 'keyword');
+                    const facetCategory = this.facets.find(cat => cat.categoryName == "keyword");
 
-                    if (!facetCategory.tags.some(t => t.tagName == keyword.name)){
-                        if(lastActive.some( last => last.tagName == keyword.name && last.tagCategory == 'keyword')){
-                            facetCategory.tags.push({ tagName: keyword.name, count: 1, active: true });
+                    if (!facetCategory.tags.some(t => t.tagName == lessonTag.name)){
+                        if(lastActive.some( last => last.tagName == lessonTag.name && last.tagCategory == "keyword")){
+                            facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: true });
                         } else {
-                            facetCategory.tags.push({ tagName: keyword.name, count: 1, active: false });
+                            facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: false });
                         }
-                    } else 
-                        facetCategory.tags.find(t => t.tagName == keyword.name).count += 1;
+                    } else
+                        facetCategory.tags.find(t => t.tagName == lessonTag.name).count += 1;
                 }
             });
         });
     },
+
 
     populateFacets() {
         const facets = this.facets;
@@ -102,8 +103,10 @@ const Search =  {
                 let facetListItem = buildFacetItem(category, tag);
                 $('#' + category.categoryName + '-facet-list').append(facetListItem);
                 if(tag.active) {
-                    console.log(tag.name, 'actve');
-                    $('#' + category.categoryName + '-' + tag.tagName + '-facet').prop('checked', true);
+                    console.log(tag.tagName, 'actve');
+                    console.log(category.categoryName, tag.tagName);
+                    console.log($('#' + category.categoryName + '-' + tag.tagName + '-facet'));
+                    $('#' + category.categoryName.replace(/ /g, '-') + '-' + tag.tagName.replace(/ /g, '-') + '-facet').prop('checked', true);
                 }
             })
         $('.facet-trigger').change(this.facetChangeHandler);
@@ -204,8 +207,7 @@ const Search =  {
 }
 
 function buildHit(raw) {
-    //var keys = raw.tags.filter( t => t.tagType == "keyword").map( k => k.name);
-    //var phases = raw.tags.filter( t => t.tagType == "phase").map( p => p.name);
+    var keys = raw.keywords.map( k => k.name);
     //var departments = raw.tags.filter( t => t.tagType == "department").map( d => d.name);
     var date = new Date(raw.createdAt).toLocaleDateString();
     return `<div class="row mb-2">
@@ -217,6 +219,8 @@ function buildHit(raw) {
                         </div>
                         <div class="card-footer">
                             <p>Created at: ${date}</p>
+                            <hr/>
+                            <span class="card-link text-muted">Keywords: ${keys.join(', ')}</span>
                         </div>
                     </div>
                 </div>
@@ -228,7 +232,7 @@ function buildFacetItem(facetCategory, facetTag) {
     const tagName = facetTag.tagName;
     const tagCount = facetTag.count;
     return `<li class="list-group-item p-0 d-flex justify-content-between align-items-center">
-                <input id="${categoryName}-${tagName}-facet" data-facet-category="${categoryName}" data-facet-tag="${tagName}" class="facet-trigger" type="checkbox" />
+                <input id="${categoryName.replace(/ /g, '-')}-${tagName.replace(/ /g, '-')}-facet" data-facet-category="${categoryName}" data-facet-tag="${tagName}" class="facet-trigger" type="checkbox" />
                 <label class="py-1 px-3 d-flex justify-content-between align-items-center" style="width: 100%;" for="${categoryName}-${tagName}-facet">
                 ${tagName}
                     <span class="badge badge-primary badge-pill">${tagCount}</span>
