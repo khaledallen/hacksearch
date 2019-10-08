@@ -1,0 +1,7 @@
+    #filter-toggler { display: none;}
+@media (max-width: 400px) { 
+    #facet-wrapper {
+        display: none;
+    }
+    #filter-toggler { display: block;}
+}
