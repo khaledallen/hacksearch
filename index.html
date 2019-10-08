@@ -11,14 +11,35 @@
     <link href="./styles.css" rel="stylesheet" />
     <title>@ViewBag.Title</title>
 <style>
-.nav-link{
+#topbar .nav-link{
     color:white !important;
 }
-.nav-link:hover{
+#topbar .nav-link:hover{
     color:gray !important;
 }
 .container-fluid{
     padding: 0px 5px;
+}
+.main-content .container-fluid{
+    padding: 0px;
+}
+.jumbotron{
+    margin-bottom: 0px;
+    background-image: url("https://images.nasa.gov/images/global-header_bg.jpg")
+}
+
+.nav-item:hover{
+background-color:#0b3d91;
+}
+.nav-item:hover a{
+color: white !important;
+}
+.nav-item.active{
+    background-color: #0b3d91;
+}
+
+.nav-item.active .nav-link{
+    color:white !important;
 }
 </style>
 
@@ -66,17 +87,57 @@
     <main class="container-fluid">
         <section class="main-content">
             <div id="SearchRow" class="jumbotron jumbotron-fluid justify-content-center">
-                <div class="col">
+                <div class="col-8 offset-2">
+                    <h1 style="color:white;" class="text-center">Johnson Space Center Search</h1>
                     <div class="input-group">
                         <input id="SearchString" class="form-control form-control-lg" type="text" placeholder="Search">
-                        <div class="input-group-append">
+                        <!-- <div class="input-group-append">
                             <input id="searchButton" type="image" src="https://search.jsc.nasa.gov/jscui/images/SearchButton.png" alt="Search" name="btnG">
-                        </div>
+                        </div> -->
                     </div>
                 </div>
-                
             </div> <!--End SearchRow-->
-
+            <div id="SearchMenu" class="container-fluid">
+                <div class="navbar navbar-expand-lg navbar-light bg-light">
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item active">
+                                <a href="#" class="nav-link">Search JSC</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Secure JSC Search</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Phone Book</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Acronym Central</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Forms</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Imagery</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Process Documents</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Public Internet</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">Site Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#" class="nav-link">News</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div> <!--End Search Menu-->
             <div class="row">
                 <div class="col-md-3">
                     <!--<button class="toggler" type="button" data-toggle="collapse" data-target="#facet-wrapper" aria-controls="facet-wrapper" aria-expanded="false" aria-label="Toggle navigation">
