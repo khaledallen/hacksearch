@@ -8,7 +8,7 @@ const Search =  {
     primaryIndex: null,
 
     initialize(dataset) {
-        this.dataset = this.currentResults = dataset.docs;
+        this.dataset = this.currentResults = dataset;
         this.searchInput = document.getElementById("SearchString");
         this.resultsContainer = document.getElementById("resultsList");
 
@@ -21,7 +21,8 @@ const Search =  {
                 id: "id",
                 field: [
                     "title",
-                    "id"
+                    "abstract",
+                    "details"
                 ]
             }
         });
@@ -29,8 +30,8 @@ const Search =  {
         this.activeIndex = this.primaryIndex;
         this.setupSearchHandler();
         this.updateUI();
-        //this.collectFacets(this.dataset);
-        //this.populateFacets();
+        this.collectFacets(this.dataset);
+        this.populateFacets();
     },
 
     // facets: [
@@ -58,24 +59,25 @@ const Search =  {
                 if(tag.active) lastActive.push({tagName: tag.tagName, tagCategory: cat.categoryName});
             });
         });
+        console.log(lastActive);
 
         this.facets = [];
-        dataToScan.forEach((lesson) => {
-            lesson.tags.forEach(lessonTag => {
-                if (lessonTag.name != '') {
-                    if (!this.facets.some(cat => cat.categoryName == lessonTag.tagType))
-                        this.facets.push({ categoryName: lessonTag.tagType, tags: [] });
+        dataToScan.forEach((data) => {
+            data.keywords.forEach(keyword => {
+                if (keyword.name != '') {
+                    if (!this.facets.some(cat => cat.categoryName == 'keyword'))
+                        this.facets.push({ categoryName: 'keyword', tags: [] });
 
-                    const facetCategory = this.facets.find(cat => cat.categoryName == lessonTag.tagType);
+                    const facetCategory = this.facets.find(cat => cat.categoryName == 'keyword');
 
-                    if (!facetCategory.tags.some(t => t.tagName == lessonTag.name)){
-                        if(lastActive.some( last => last.tagName == lessonTag.name && last.tagCategory == lessonTag.tagType)){
-                            facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: true });
+                    if (!facetCategory.tags.some(t => t.tagName == keyword.name)){
+                        if(lastActive.some( last => last.tagName == keyword.name && last.tagCategory == 'keyword')){
+                            facetCategory.tags.push({ tagName: keyword.name, count: 1, active: true });
                         } else {
-                            facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: false });
+                            facetCategory.tags.push({ tagName: keyword.name, count: 1, active: false });
                         }
                     } else 
-                        facetCategory.tags.find(t => t.tagName == lessonTag.name).count += 1;
+                        facetCategory.tags.find(t => t.tagName == keyword.name).count += 1;
                 }
             });
         });
@@ -100,6 +102,7 @@ const Search =  {
                 let facetListItem = buildFacetItem(category, tag);
                 $('#' + category.categoryName + '-facet-list').append(facetListItem);
                 if(tag.active) {
+                    console.log(tag.name, 'actve');
                     $('#' + category.categoryName + '-' + tag.tagName + '-facet').prop('checked', true);
                 }
             })
@@ -127,9 +130,9 @@ const Search =  {
             category.tags.forEach(tag => {
                 if (tag.active) {
                     activeTags = true;
-                    for (let i = 0; i < item.tags.length; i++) {
-                        let indexTag = item.tags[i];
-                        if (indexTag.tagType == category.categoryName && indexTag.name == tag.tagName) {
+                    for (let i = 0; i < item.keywords.length; i++) {
+                        let indexTag = item.keywords[i];
+                        if (indexTag.name == tag.tagName) {
                             found = true;
                             break;
                         }
@@ -150,7 +153,9 @@ const Search =  {
             doc: {
                 id: "id",
                 field: [
-                    "title"
+                    "title",
+                    "abstract",
+                    "details"
                 ]
             }
         });
@@ -167,7 +172,7 @@ const Search =  {
 
     searchHandler(evt) {
         if(Search.searchInput.value == ''){
-            Search.currentResults = Search.dataset;
+            Search.facetSearch();
             Search.updateUI();
             return;
         }
@@ -191,9 +196,9 @@ const Search =  {
                 var hit = buildHit(result);
                 Search.resultsContainer.innerHTML += hit;
             });
-            //this.collectFacets(this.currentResults);
+            this.collectFacets(this.currentResults);
         }
-        //this.populateFacets();
+        this.populateFacets();
     },
 
 }
@@ -202,12 +207,16 @@ function buildHit(raw) {
     //var keys = raw.tags.filter( t => t.tagType == "keyword").map( k => k.name);
     //var phases = raw.tags.filter( t => t.tagType == "phase").map( p => p.name);
     //var departments = raw.tags.filter( t => t.tagType == "department").map( d => d.name);
-    return `<div class="row">
+    var date = new Date(raw.createdAt).toLocaleDateString();
+    return `<div class="row mb-2">
                 <div class="col-sm-12">
                     <div class="card">
-                        <h5 class="card-header">${raw.title}</h5>
+                        <h5 class="card-header">${raw.title}<span class="float-right" text-muted">id:${raw.id}</span></h5>
                         <div class="card-body">
-                            <p class="card-text">${raw.id}</p>
+                            <p class="card-text">${raw.abstract}</p>
+                        </div>
+                        <div class="card-footer">
+                            <p>Created at: ${date}</p>
                         </div>
                     </div>
                 </div>
