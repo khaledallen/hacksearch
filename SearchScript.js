@@ -28,10 +28,11 @@ const Search =  {
             },
             worker: 2
         });
+        console.log(this.dataset)
         this.primaryIndex.add(this.dataset);
         this.activeIndex = this.primaryIndex;
         this.setupSearchHandler();
-        this.searchHandler();
+        //this.searchHandler();
         this.updateUI();
         this.collectFacets(this.dataset);
         this.populateFacets();
@@ -177,21 +178,23 @@ const Search =  {
 
     searchHandler(evt) {
         if(Search.searchInput.value == ''){
+            console.log('hey');
             Search.facetSearch();
             Search.updateUI();
             return;
         }
-        const query = evt.currentTarget.value;
-        Search.primaryIndex.search({
-            query: query,
-            suggest: true,
-            limit: 20,
-            page: true
-        })
-        .then(function(results){
+
+        var query = evt.currentTarget.value;
+        $.ajax("http://5d9cbcd566d00400145c9e57.mockapi.io/api/v1/search?search=" + query).done(function(data){
+            console.log(data)
+            
+            var results = data;
             Search.currentResults = results;
             Search.updateUI();
+
         });
+
+
     },
 
     updateUI(){
