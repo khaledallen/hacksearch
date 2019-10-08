@@ -24,7 +24,8 @@ const Search =  {
                     "abstract",
                     "details"
                 ]
-            }
+            },
+            worker: 2
         });
         this.primaryIndex.add(this.dataset);
         this.activeIndex = this.primaryIndex;
@@ -156,7 +157,8 @@ const Search =  {
                     "abstract",
                     "details"
                 ]
-            }
+            },
+            worker: 2
         });
         const results = Search.primaryIndex.where(Search.facetSearchWhereFunction);
         newIndex.add(results);
