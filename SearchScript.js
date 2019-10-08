@@ -9,6 +9,7 @@ const Search =  {
 
     initialize(dataset) {
         this.dataset = this.currentResults = dataset;
+        console.log(this.currentResults);
         this.searchInput = document.getElementById("SearchString");
         this.resultsContainer = document.getElementById("resultsList");
 
@@ -24,11 +25,13 @@ const Search =  {
                     "abstract",
                     "details"
                 ]
-            }
+            },
+            worker: 2
         });
         this.primaryIndex.add(this.dataset);
         this.activeIndex = this.primaryIndex;
         this.setupSearchHandler();
+        this.searchHandler();
         this.updateUI();
         this.collectFacets(this.dataset);
         this.populateFacets();
@@ -61,25 +64,27 @@ const Search =  {
         });
 
         this.facets = [];
+        this.facets.push({ categoryName: "keyword", tags: [] });
         dataToScan.forEach((lesson) => {
-            lesson.keywords.forEach(lessonTag => {
-                if (lessonTag.name != '') {
-                    if (!this.facets.some(cat => cat.categoryName == lessonTag.tagType))
-                        this.facets.push({ categoryName: "keyword", tags: [] });
+            if(lesson.keywords) {
+                lesson.keywords.forEach(lessonTag => {
+                    if (lessonTag.name != '') {
 
-                    const facetCategory = this.facets.find(cat => cat.categoryName == "keyword");
+                        const facetCategory = this.facets.find(cat => cat.categoryName == "keyword");
 
-                    if (!facetCategory.tags.some(t => t.tagName == lessonTag.name)){
-                        if(lastActive.some( last => last.tagName == lessonTag.name && last.tagCategory == "keyword")){
-                            facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: true });
-                        } else {
-                            facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: false });
-                        }
-                    } else
-                        facetCategory.tags.find(t => t.tagName == lessonTag.name).count += 1;
-                }
-            });
+                        if (!facetCategory.tags.some(t => t.tagName == lessonTag.name)){
+                            if(lastActive.some( last => last.tagName == lessonTag.name && last.tagCategory == "keyword")){
+                                facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: true });
+                            } else {
+                                facetCategory.tags.push({ tagName: lessonTag.name, count: 1, active: false });
+                            }
+                        } else
+                            facetCategory.tags.find(t => t.tagName == lessonTag.name).count += 1;
+                    }
+                });
+            }
         });
+        console.log(this.facets)
     },
 
 
@@ -156,7 +161,8 @@ const Search =  {
                     "abstract",
                     "details"
                 ]
-            }
+            },
+            worker: 2
         });
         const results = Search.primaryIndex.where(Search.facetSearchWhereFunction);
         newIndex.add(results);
@@ -205,7 +211,7 @@ const Search =  {
 }
 
 function buildHit(raw) {
-    var keys = raw.keywords.map( k => k.name);
+    var keys = raw.keywords ? raw.keywords.map( k => k.name) : [];
     //var departments = raw.tags.filter( t => t.tagType == "department").map( d => d.name);
     var date = new Date(raw.createdAt).toLocaleDateString();
     return `<div class="row mb-2">
