@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <link href="./styles.css" rel="stylesheet" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <main class="container">
+        <div class="collapse navbar-collapse" id="collapsibleNavbar">
+            <nav class="navbar navbar-expand-sm">
+                <a class="navbar-brand">JSC LLDB</a>
+            </nav>
+        </div>
+
+        <section class="main-content">
+            <div class="row">
+                <div class="col-md-4">
+                    <div id="facet-wrapper">
+                        <h6 clas="card-title">Filter by:</h6>
+                    </div>
+                </div>
+                <div class="col-md-8">
+                    <div class="form-group">
+                        <input id="SearchString" class="form-control form-control-lg" type="text" placeholder="Search">
+                    </div>
+
+                    <div id="resultsList" >
+                    </div>
+
+                </div>
+
+
+                <script src="https://cdn.jsdelivr.net/gh/nextapps-de/flexsearch@master/dist/flexsearch.min.js"></script>
+                <script src="./SearchScript.js" ></script>
+                <script src="./data.js" ></script>
+                <script>
+                    Search.initialize(data);
+                </script>
+                <script src="./main.js" ></script>
+            </div>
+        </section>
+
+        <footer id="footer" class="row">
+            <div class="col-sm-4 text-left"><small>National Aeronautics & Space Administration</small></div>
+            <div class="col-sm-4 text-center"><small>Last updated September 30th, 2019</small></div>
+            <div class="col-sm-4 text-right"><small>Office of Knowledge Management</small></div>
+        </footer>
+    </main>
+</body>
+</html>
