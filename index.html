@@ -10,35 +10,92 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link href="./styles.css" rel="stylesheet" />
     <title>@ViewBag.Title</title>
+<style>
+.nav-link{
+    color:white !important;
+}
+.nav-link:hover{
+    color:gray !important;
+}
+.container-fluid{
+    padding: 0px 5px;
+}
+</style>
+
 </head>
 <body>
-    <main class="container">
-        <div class="collapse navbar-collapse" id="collapsibleNavbar">
-            <nav class="navbar navbar-expand-sm">
-                <a class="navbar-brand">JSC LLDB</a>
-            </nav>
+    <div id="topbar" class="container-fluid">
+        <div class="navbar navbar-expand-sm navbar-dark bg-dark">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">Advanced Search</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">NASA Search</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">JSC Home</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">FAQ</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">A-Z</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">Ask A Librarian</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">New Features</a>
+                </li>
+                <li class="nav-item">
+                        <a href="#" class="nav-link">Submit Feedback</a>
+                </li>
+                
+            </ul>
+            </div>
         </div>
-
+    </div> <!--End Top Bar-->
+    <main class="container-fluid">
         <section class="main-content">
+            <div id="SearchRow" class="jumbotron jumbotron-fluid justify-content-center">
+                <div class="col">
+                    <div class="input-group">
+                        <input id="SearchString" class="form-control form-control-lg" type="text" placeholder="Search">
+                        <div class="input-group-append">
+                            <input id="searchButton" type="image" src="https://search.jsc.nasa.gov/jscui/images/SearchButton.png" alt="Search" name="btnG">
+                        </div>
+                    </div>
+                </div>
+                
+            </div> <!--End SearchRow-->
+
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
+                    <!--<button class="toggler" type="button" data-toggle="collapse" data-target="#facet-wrapper" aria-controls="facet-wrapper" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>-->
                     <div id="facet-wrapper">
                         <h6 clas="card-title">Filter by:</h6>
                     </div>
+            </div>
+                <div class="col-md-9">
+                        <div id="resultsList" ></div>
                 </div>
-                <div class="col-md-8">
-                    <div class="form-group">
-                        <input id="SearchString" class="form-control form-control-lg" type="text" placeholder="Search">
-                    </div>
-
-                    <div id="resultsList" >
-                    </div>
-
-                </div>
-
 
                 <script src="https://cdn.jsdelivr.net/gh/nextapps-de/flexsearch@master/dist/flexsearch.min.js"></script>
                 <script src="./SearchScript.js" ></script>
+                <script src="./data.js" ></script>
+                <script>
+                    Search.initialize(data);
+                </script>
                 <script src="./main.js" ></script>
             </div>
         </section>
