@@ -59,7 +59,6 @@ const Search =  {
                 if(tag.active) lastActive.push({tagName: tag.tagName, tagCategory: cat.categoryName});
             });
         });
-        console.log(lastActive)
 
         this.facets = [];
         dataToScan.forEach((lesson) => {
@@ -103,13 +102,10 @@ const Search =  {
                 let facetListItem = buildFacetItem(category, tag);
                 $('#' + category.categoryName + '-facet-list').append(facetListItem);
                 if(tag.active) {
-                    console.log(tag.tagName, 'actve');
-                    console.log(category.categoryName, tag.tagName);
-                    console.log($('#' + category.categoryName + '-' + tag.tagName + '-facet'));
                     $('#' + category.categoryName.replace(/ /g, '-') + '-' + tag.tagName.replace(/ /g, '-') + '-facet').prop('checked', true);
                 }
             })
-        $('.facet-trigger').change(this.facetChangeHandler);
+            document.querySelectorAll('.facet-trigger').forEach( e => e.onchange = this.facetChangeHandler);
         })
     },
 
@@ -182,7 +178,9 @@ const Search =  {
         const query = evt.currentTarget.value;
         Search.primaryIndex.search({
             query: query,
-            suggest: true
+            suggest: true,
+            limit: 20,
+            page: true
         })
         .then(function(results){
             Search.currentResults = results;
