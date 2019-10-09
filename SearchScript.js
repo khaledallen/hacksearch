@@ -16,7 +16,6 @@ const Search =  {
         this.primaryIndex = new FlexSearch({
             tokenize: "forward",
             depth: 3,
-            async: true,
             encoders: "advanced",
             doc: {
                 id: "id",
@@ -26,9 +25,10 @@ const Search =  {
                     "details"
                 ]
             },
-            worker: 2
+            workers: 4
         });
         console.log(this.dataset)
+        console.log(this.primaryIndex.info());
         this.primaryIndex.add(this.dataset);
         this.activeIndex = this.primaryIndex;
         this.setupSearchHandler();
@@ -162,8 +162,7 @@ const Search =  {
                     "abstract",
                     "details"
                 ]
-            },
-            worker: 2
+            }
         });
         const results = Search.primaryIndex.where(Search.facetSearchWhereFunction);
         newIndex.add(results);
@@ -177,23 +176,22 @@ const Search =  {
     },
 
     searchHandler(evt) {
+
         if(Search.searchInput.value == ''){
-            console.log('hey');
+            console.log('input was empty');
             Search.facetSearch();
             Search.updateUI();
             return;
         }
 
         var query = evt.currentTarget.value;
-        $.ajax("http://5d9cbcd566d00400145c9e57.mockapi.io/api/v1/search?search=" + query).done(function(data){
-            console.log(data)
-            
-            var results = data;
+        console.log('query was not empty', query);
+
+        Search.primaryIndex.search(query, function(results) {
+            console.log(results);
             Search.currentResults = results;
             Search.updateUI();
-
         });
-
 
     },
 
